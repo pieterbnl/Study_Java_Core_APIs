@@ -3,6 +3,7 @@ package com.pbe;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Locale;
 
 /** Study on Java core APIs
  @author Pieter Beernink
@@ -178,9 +179,17 @@ public class Main {
         // spliterator - public Spliterator<E> spliterator()
         // Creates a late-binding and fail-fast Spliterator over the elements in the arraylist
 
-        // create ArrayList languages and add elements
+        // create ArrayList languages
         ArrayList<String> languages = new ArrayList<>();
 
+        // NOTE: ArrayList can also be created without specifying a type, as shown below.
+        // In that case .get would return an element of type Object
+        // ArrayList languages = new ArrayList();
+        // languages.add("Dutch");
+        // languages.add("English");
+        // String element = languages.get(1); // would cause compilation failure as .get would return an Object type, not String type
+
+        // use .add to add elements
         languages.add("Dutch");
         languages.add("English");
         languages.add("Python");
@@ -188,6 +197,12 @@ public class Main {
 
         // display contents of languages
         System.out.println("ArrayList languages:\n" + languages);
+        System.out.println();
+
+        // elements can also be added at a specific index
+        languages.add(1, "Basic");
+        // languages.add(10, "Basic"); // adding at an index that's out of bounds, will cause an IndexOutOfBoundsException
+        System.out.println("ArrayList languages, after adding Basic:\n" + languages);
         System.out.println();
 
         // use of addAll() - create a copy of ArrayList languages
@@ -221,7 +236,7 @@ public class Main {
         System.out.println("ArrayList languages, after set() Javascript:\n" + languages);
         System.out.println();
 
-        // check return of set()
+        // check return of set() - returning the contents of the element that has been replaced by set() (Javascript)
         System.out.println("Set() return, after set() Visual Basic, at index 1:\n" + languages.set(1, "Visual Basic"));
         System.out.println();
 
@@ -359,6 +374,212 @@ public class Main {
         System.out.println("Displaying items in languages arraylist, using forEach: ");
         languages.forEach((n) -> System.out.print(n + ", "));
         System.out.println();
+        System.out.println();
+
+        // *********************
+        // Strings
+        // *********************
+        // Strings in Java are not primitive types like int, char, ...
+        // Instead, Strings are objects of the predefined class String.
+        // Hence, all string variables are instances of the String class
+        // The String class is immutable: once a String object is created, it cannot be changed
+        // Meaning it's size and contents are fixed
+        // Even though String is immutable, it can still be used in a mutable class
+        // A String instance variable can be made final
+        //
+        // length - public int length()
+        // Returns the length of a string
+        // The length is equal to the number of char values (code units) in the string
+        //
+        // concat - public String concat(String str)
+        // Concatenates the specified string to the end of another string and returns it
+        // The concat() method takes a single parameter: str, the string to be joined
+        // It returns a string which is the concatenation of string and str (argument string)
+        // Throws a NullPointerException if one of the strings is null
+        // Note:
+        // - that with concat() you can only pass a single String
+        // - it's easier to use standard operators for concatenations, following these basic rules:
+        // 1. If both operands are numeric, + means numeric addition
+        // 2. If either operand is a String, + means concatenation
+        // 3. The expression is evaluated from left to right
+        //
+        // charAt - public char charAt(int index)
+        // Returns the character present at the specified index
+        // An index ranges from 0 to length() - 1
+        // The first char value is at index 0
+        // Throws IndexOutOfBoundsException if index argument is negative or not less than the string length
+        //
+        // indexOf - public int indexOf(int ch)
+        // Returns the index of the first occurrence of the specified character/substring (ch) within the string
+        // Returns -1 if the character does not occur
+        // Optionally, fromIndex can be passed, searching the ch character starting from this index
+        // Note that when an empty string is passed ("") as ch, 0 will be returned
+        // This is because an empty string is a subset of every substring.
+        // All characters are separated by an empty String and an empty String is present at the beginning and at the end?
+        //
+        // substring - public String substring(int beginIndex, int endIndex)
+        // Returns the substring of a string, beginning with the character at the specified index (beingIndex)
+        // Extending to the (optional) given index (endIndex), or if no endIndex is provided: the end of the string
+        // An error will be given if:
+        // - startIndex/endIndex is negative, or greater than the provided string's length
+        // - startIndex is greater than endIndex
+        //
+        // toLowerCase/toUpperCase
+        // Converts all characters in the string to lowercase/uppercase characters
+        // Uses the rules of the given 'Locale' and is locale sensitive
+        // May produce unexpected results if used for strings that are intended to be interpreted locale independently
+        // Case mapping is based on the Unicode Standard version specified by the Character class
+        // Note: Case mappings are not always 1:1 char mappings,
+        // As a result, the resulting String may be of a different length than the original String
+        //
+        // equals - public boolean equals(Object anObject)
+        // Compares string to the specified object
+        // Returns true if the given object represents a String equivalent to this string
+        //
+        // equalsIgnoreCase
+        // Compares this String to another String, ignoring case considerations
+        // The strings are considered equal, ignoring case, if both:
+        // 1. Are of the same length
+        // 2. It's corresponding characters are equal
+        // Returns true if the argument is not null, and it represents an equivalent String ignoring case
+        //
+        // startsWith
+        //
+        //
+        // endsWith
+        //
+        //
+        // replace
+        // Replaces the specified old character with the specified new character
+        //
+        // replaceAll
+        //
+        //
+        // contains
+        //
+        //
+        // trim
+        //
+        //
+        // strip
+        //
+        //
+        // stripLeading
+        //
+        //
+        // stripTrailing
+        //
+        //
+        // intern
+        //
+        //
+        // getBytes
+        // Converts the string to an array of bytes
+        //
+        // compareTo
+        // Compares two strings in the dictionary order
+        //
+        // trim
+        // Removes any leading and trailing whitespaces
+        //
+        // format
+        // Returns a formatted string
+        //
+        // split
+        // Breaks the string into an array of strings
+        //
+        // valueOf
+        // Returns the string representation of the specified argument
+        //
+        // toCharArray
+        // Converts the string to a char array
+
+        // defining some strings to work with
+        String myString1 = "";
+        String myString2 = "This Aggression Will Not Stand, Man";
+        String myString3 = "The Rug Pee-Ers Did Not Do This.";
+        String myString4 = "Yeah, Well, That's Just, Like, Your Opinion, Man.";
+        String myString5 = " ";
+        String myString6 = "Hi\n";
+
+        // use of length() - display the size of various strings
+        System.out.println("myString1 '" + myString1 + "' length is: " + myString1.length() + " characters");
+        System.out.println("myString2 '" + myString2 + "' length is: " + myString2.length() + " characters");
+        System.out.println("myString5 '" + myString5 + "' length is: " + myString5.length() + " characters");
+        System.out.println("myString6 '" + myString6 + "' length is: " + myString6.length() + " characters"); // note that \n (newline) is considered a single character
+        System.out.println();
+
+        // concatenation by use of operators
+        System.out.println("myString2 is: " + myString2);
+        System.out.println("myString4 is: " + myString4);
+        String myString = myString2 + " - " + myString4;
+        System.out.println("both strings concatenated, using operators: " + myString);
+
+        // string concatenation with use of operators - combining numbers and Strings
+        System.out.println(2 + 2); // 4
+        System.out.println("hel" + "lo"); // hello
+        System.out.println("hel" + "lo" + 007); // hello7
+        System.out.println(222 + 222 + 222 + " degrees"); // 666 degrees
+        System.out.println("feb" + 8 + 3); // feb83
+        System.out.println();
+
+        // use of concat - concatenating two strings
+        System.out.println("myString2 is: " + myString2);
+        System.out.println("myString4 is: " + myString4);
+        System.out.println("both strings concatenated, using concat: " + myString2.concat(myString4));
+        System.out.println();
+
+        // use of charAt - return character from a given index in a string
+        System.out.println("myString3 is: " + myString3);
+        System.out.println("myString3 character at index 0: " + myString3.charAt(0));
+        System.out.println("myString3 character at index 3: " + myString3.charAt(3));
+        System.out.println("myString3 character at index 4: " + myString3.charAt(4));
+        System.out.println("myString3 character at final index: " + myString3.charAt(myString3.length()-1));
+        System.out.println();
+
+        // use of indexOf - return index from a given character in a string
+        myString = "Java rocks - 2021";
+        // myString = null; // would cause NullPointerException
+        System.out.println(myString);
+        System.out.println("indexOf J: " + myString.indexOf("J")); // 0
+        System.out.println("indexOf a: " + myString.indexOf("a")); // 1 - first occurrence of a
+        System.out.println("indexOf  : " + myString.indexOf(" ")); // 4
+        System.out.println("indexOf 2: " + myString.indexOf("2")); // 13
+        System.out.println("indexOf 9: " + myString.indexOf("9")); // -1; as this character isn't present in the string
+        System.out.println("indexOf : " + myString.indexOf("")); // 0; index of empty character in the string
+        System.out.println("indexOf : " + myString.indexOf("a", 2)); // 3; - first occurrence of a, after index 2
+        System.out.println("indexOf : " + myString.indexOf("a", 5)); // -1; no occurrences of a found after index 5
+        System.out.println();
+
+        // use of substring() - returning a substring from myString
+        // based on a given starting index (inclusive) (and ending index (exclusive))
+        System.out.println(myString);
+        System.out.println("substring of index 0 until 4): " + myString.substring(0,4)); // note: excludes index 4
+        System.out.println("substring of index 4 until 5): " + myString.substring(4,5));
+        System.out.println("substring of index 5 until 6): " + myString.substring(5,6));
+        System.out.println("substring of index 7 until 7): " + myString.substring(7,7)); // will return an empty string
+        System.out.println("substring of index 5 until end): " + myString.substring(5)); // no end index specified, means ending at the end of string
+        // System.out.println("substring of index -5 until 5): " + myString.substring(-5, 5)); // given startindex is negative; will result in StringIndexOutOfBoundsException
+        // System.out.println("substring of index 25 until end): " + myString.substring(25)); // given index is out of bounds; will result in StringIndexOutOfBoundsException
+        // System.out.println("substring of index 10 until 5): " + myString.substring(10, 5)); // given startindex is higher than end index; will result in StringIndexOutOfBoundsException
+        System.out.println();
+
+        // use of toUpperCase and toLowerCase - converting string to upper case and lower case characters
+        System.out.println("Original string: " + myString);
+        System.out.println("String in upper case: " + myString.toUpperCase());
+        System.out.println("String in lower case: " + myString.toLowerCase());
+        System.out.println("Original string again: " + myString); // no changes where inflicted to the original string
+        System.out.println();
+
+        // example of effect of toLowerCase with changing locale - showing toLowerCase() is locale specific
+        Locale.setDefault(new Locale("lt")); // setting Lithuanian as locale
+        String str = "\u00cc";
+        System.out.println("Before case conversion str is " + str + ", and it's length: " + str.length()); // Ì
+        String lowerCaseStr = str.toLowerCase();
+        System.out.println("After toLowerCase() str now is " + lowerCaseStr + ", and it's length: " + lowerCaseStr.length()); // i?`
+        // Note: another method toLowerCase(Locale.English) may be used and override the locale to English always
+        // However, then the application is not internationalized.
+
 
     }
 }
