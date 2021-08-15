@@ -1,6 +1,8 @@
 package com.pbe;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
 
 /** Study on Java core APIs
  @author Pieter Beernink
@@ -85,15 +87,29 @@ public class Main {
         // This method does not return any values: it replaces all values of the list with new values from operator
         //
         // sort - public void sort(Comparator<? super E> c)
-        // Sorts this arraylist to the order induced by the specified Comparator.
+        // Sorts elements in an arraylist according to the specified order (Comparator)
         // All elements in this list must be mutually comparable using the specified comparator
         // That is: c.compare(e1, e2) must not throw a ClassCastException for any elements e1 and e2 in the list
+        // The sort() method does not return any value: it only changes the order of elements in the list
+        // The comparator interface provides several sorting methods, such as ascending and descending order
+        // Note: Collections.sort() method is a more convenient method for sorting arraylists
+        //
+        // ensureCapacity() - public void ensureCapacity(int minCapacity)
+        // Sets the size of an arraylist with the specified capacity, ensuring it can hold minimum specified number of elements
+        // Takes a single parameter minCapacity: the specified minimum capacity of the arraylist
+        // ArrayList dynamically resizes when adding elements, however:
+        // An application can increase the capacity of an ArrayList instance before adding a large number of elements,
+        // using the ensureCapacity operation. This may reduce the amount of incremental reallocation.
+        // The working of ensureCapacity() is not visible to the user
         //
         // trimToSize() - public void trimToSize()
         // Trims capacity of ArrayList instance to be the list's current size, minimizing its storage
-        //
-        // ensureCapacity() - public void ensureCapacity(int minCapacity)
-        // Increases  capacity of ArrayList instance, ensuring it can hold minimum specified number of elements
+        // The trimToSize() method does not return any value, it only changes the capacity of the arraylist.
+        // Note: Java ArrayList uses an array to store all its elements. When, at some point, the array is filled:
+        // - a new array is created with 1.5 times more capacity than the current array.
+        // - all elements are moved to the new array.
+        // This results in unassigned space in the internal array, which is removed by using trimToSize()
+        // The working of trimToSize() is not visible to the user
         //
         // size() - public int size()
         // Returns the no. of elements in the arraylist
@@ -119,18 +135,48 @@ public class Main {
         // Returns a shallow copy of this ArrayList instance: elements themselves are not copied
         // Note: A shallow copy copies the references and a deep copy the values.
         //
-        // toArray
+        // toArray - public Object[] toArray()
+        // Converts an arraylist into an array and returns it
+        // All elements in the array are in sequence from first to last element as in the list
+        // This method allocates a new array, meaning no references to it are maintained by this list.
+        // This method acts as bridge between array-based and collection-based APIs
+        // The toArray() method can take a single parameter: arraylist.toArray(T[] arr)
+        // With T specifying the type of the array
+        // I.e. toArray() returns an Array of type T or type Object, if no parameter is passed
         //
-        // istIterator
+        // listIterator - public ListIterator<E> listIterator(int index)
+        // Returns a list iterator over the elements in this list, starting at the specified position in the list
+        // The specified index indicates the first element that would be returned by an initial call to 'next'
+        // An initial call to 'previous' would return the element with the specified index, minus one
+        // The list is returned in 'proper sequence': in order from the first to tje last element
+        // Throws IndexOutOfBoundsException if the index is out of range
+        // Note: the returned list iterator is 'fail-fast', Meaning that if there is
+        // a structural modification (addition or removal of any element)
+        // of the collection while a thread is iterating over that collection,
+        // a ConcurrentModificationException will be thrown immediately.
         //
-        // iterator
+        // iterator - public ListIterator<E> listIterator()
+        // Returns an iterator to access each element of the arraylist in a proper sequence (first to last)
+        // The iterator() method does not take any parameters.
+        // The iterator returned by the method is stored in the variable of the interface Iterator type
         //
-        // subList
+        // subList - public List<E> subList(int fromIndex, int toIndex)
+        // Returns a view of an extracted portion of an arraylist, specified fromIndex (inclusive) and toIndex (exclusive).
+        // If fromIndex and toIndex are equal, the returned list is empty
+        // This method eliminates the need for explicit range operations
+        // Operations that expects a list can be used as a range operation by passing a subList view instead of a whole list
+        // The returned list supports all of the optional list operations
+        // Also all of the algorithms in the Collections class can be applied to a subList
+        // Throws IndexOutOfBoundsException if an endpoint index value is out of range
+        // Throws IllegalArgumentException if the endpoint indices are out of order
         //
-        // forEach
+        // forEach - public void forEach(Consumer<? super E> action)
+        // Performs given action for each element of the Iterable,
+        // until all elements have been processed or the action throws an exception
+        // Actions are performed in the order of iteration (if an order is specified)
         //
-        // spliterator
-
+        // spliterator - public Spliterator<E> spliterator()
+        // Creates a late-binding and fail-fast Spliterator over the elements in the arraylist
 
         // create ArrayList languages and add elements
         ArrayList<String> languages = new ArrayList<>();
@@ -268,23 +314,51 @@ public class Main {
         System.out.println("ArrayList languagesClone currently:\n" + languagesClone);
         System.out.println();
 
+        // use of sort() - sorting languages arraylist
+        System.out.println("ArrayList languages, currently unsorted:\n" + languages);
+        languages.sort(Comparator.naturalOrder()); // sorting in ascending order
+        System.out.println("ArrayList languages, after sorting:\n" + languages);
+        languages.sort(Comparator.reverseOrder()); // sorting in ascending order
+        System.out.println("ArrayList languages, after sorting:\n" + languages);
+        System.out.println();
 
-        // toArray
+        // use of toArray()
+        // First create an array with the correct size
+        // Then convert the arraylist into the array
+        // And print out all elements of the array
+        // String[] arr = new String[0]; // this would not work, as the array requires as length equal or bigger than the list
+        String[] arr = new String[languages.size()];
+        languages.toArray(arr); // passing an array of type String as an argument
+        System.out.println("Array contents, after converting languages toArray(): ");
+        for (String item : arr) System.out.print(item + ", ");
+        System.out.println();
+        System.out.println();
 
-        // istIterator
+        // another use of toArray() - without parameter (not recommended)
+        // String[] arr2 = (String[]) languages.toArray(); // this does not work, results in ClassCastException
+        // for (String item : arr2) System.out.print(item + ", ");
+        System.out.println("Array contents, after converting languages toArray() again: ");
+        Object[] obj = languages.toArray(); // returning an array of objects
+        for (Object item : obj) System.out.print(item + ", ");
+        System.out.println();
+        System.out.println();
 
-        // iterator
+        // using iterator to go through languages arraylist
+        // First create an Iterator
+        // Then loop through the list, using the iterator methods, until all elements are passed
+        Iterator<String> iterate = languages.iterator();
+        System.out.println("Iterating through the array, using an Iterator: ");
+        while(iterate.hasNext()) {
+            System.out.print(iterate.next());
+            System.out.print(", ");
+        }
+        System.out.println();
+        System.out.println();
 
-        // subList
-
-        // forEach
-
-        // spliterator
-
-        // trimToSize()
-
-        // ensureCapacity()
-
+        // forEach - iterating over arraylist
+        System.out.println("Displaying items in languages arraylist, using forEach: ");
+        languages.forEach((n) -> System.out.print(n + ", "));
+        System.out.println();
 
     }
 }
