@@ -1,9 +1,6 @@
 package com.pbe;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Locale;
+import java.util.*;
 
 /** Study on Java core APIs
  @author Pieter Beernink
@@ -434,7 +431,10 @@ public class Main {
         //
         // equals - public boolean equals(Object anObject)
         // Compares string to the specified object
-        // Returns true if the given object represents a String equivalent to this string
+        // Returns true if two strings are equal: string.equals(String str)
+        // Returns false if the strings are not equal or if String object to be compared is null
+        // Note that equals() takes letter case into consideration
+        // Use compareToIgnoreCase() method to ignore case differences
         //
         // equalsIgnoreCase
         // Compares this String to another String, ignoring case considerations
@@ -443,56 +443,90 @@ public class Main {
         // 2. It's corresponding characters are equal
         // Returns true if the argument is not null, and it represents an equivalent String ignoring case
         //
-        // startsWith
-        //
+        // startsWith - public boolean startsWith(String prefix, int toffset)
+        // Checks if a given string begins with the specified string or not
+        // Returns true if the string begins with the given string
+        // The startsWith() method can take two parameters:
+        // 1. prefix - check whether string starts with prefix or not
+        // 2. offset (optional) - checks in a substring of string starting from this index
+        // Note: startsWith() takes letter casing into consideration
         //
         // endsWith
+        // Same as startsWith, but not for ending of a String
+        // Returns true if the string ends with the given string
         //
+        // replace - public String replace(CharSequence target, CharSequence replacement)
+        // Replaces each matching occurrence of given character(s) in the string with given replacement character(s)
+        // Returns the resulting String
+        // Takes parameters:
+        // 1. target - the sequence of characters to be replaced
+        // 2. replacement - the replacement sequence of characters
         //
-        // replace
-        // Replaces the specified old character with the specified new character
+        // replaceAll - public String replaceAll(String regex, String replacement)
+        // Replaces each substring of a string that matches the given regular expression with the given replacement
+        // Returns the resulting String
+        // Takes parameters:
+        // 1. regex - the regular expression to which this string is to be matched
+        // 2. replacement - the string to be substituted for each match
+        // Throws PatternSyntaxException if the regular expression's syntax is invalid
         //
-        // replaceAll
+        // contains - public boolean contains(CharSequence s)
+        // Returns true if a string contains the specified sequence of characters
+        // Note: contains is a convenience method for str.indexOf(someString) != -1
         //
+        // trim/strip - public String trim()/strip()
+        // Strip and trim both removes any leading and trailing whitespaces
+        // The difference is that strip also supports Unicode.
+        // The strip method has been added in SE11
+        // Note: whitespaces consists of spaces as well as: \t (tab) and \n (newline) characters
         //
-        // contains
+        // stripLeading/stripTrailing - public String stripLeading()/stripTrailing()
+        // Also added in SE11
+        // stripLeading removes whitespace from the beginning of the String, leaving it at the end
+        // stripLeading removes whitespace from the end of the String, leaving it at the beginning
         //
+        // intern - public String intern()
+        // Returns the value from the string pool (a canonical representation of the string object), if it's there
+        // If not there, adds the value to the string pool
+        // String interning ensures that all strings having the same contents use the same memory
+        // For example if str1 and str2 both contain the contents "xyz" they will share the same memory
+        // Instead, if 2 strings are created using the new keyword, they won't share the same memory
+        // The latter is not considered equal, because they don't share the same memory
         //
-        // trim
+        // getBytes - public byte[] getBytes()
+        // Encodes a string into a sequence of bytes (using the platform's default charset), storing the result into a new byte array
+        // Note: a Java String is internally stored as char[] (UTF-16 encoded)
+        // Each char is 16 bits, and represents a Unicode character
+        // The getBytes() allows to obtain a byte array for the string
+        // The CharsetEncoder class should be used for more control over the encoding process
         //
+        // compareTo - public int compareTo(String anotherString)
+        // Compares two strings (in dictionary order)
+        // The comparison is based on the Unicode value of each character in the strings
         //
-        // strip
+        // format - public static String format(String format, Object... args) or format(Locale l, String format, Object... args)
+        // Returns a formatted string, using the specified format string and arguments
+        // Takes args parameter: arguments referenced by the format specifiers in the format string
+        //  If there are more arguments than format specifiers, extra arguments are ignored
+        //  The number of arguments is variable and may be zero
+        // Throws IllegalFormatException if:
+        // - a format string contains an illegal syntax
+        // - a format specifier that is incompatible with the given arguments
+        // - insufficient arguments given the format string
+        // - other illegal conditions occur
         //
+        // split - public String[] split(String regex)
+        // Splits the string into an array of strings around matches of the given regular expression
+        // This method works as if by invoking the two-argument split method with the given expression and a limit argument of zero
+        // Trailing empty strings are therefore not included in the resulting array
         //
-        // stripLeading
-        //
-        //
-        // stripTrailing
-        //
-        //
-        // intern
-        //
-        //
-        // getBytes
-        // Converts the string to an array of bytes
-        //
-        // compareTo
-        // Compares two strings in the dictionary order
-        //
-        // trim
-        // Removes any leading and trailing whitespaces
-        //
-        // format
-        // Returns a formatted string
-        //
-        // split
-        // Breaks the string into an array of strings
-        //
-        // valueOf
+        // valueOf - public static String valueOf(Object obj)
         // Returns the string representation of the specified argument
+        // If the argument is null, then a string equal to "null"
+        // Otherwise, the value of obj.toString() is returned
         //
-        // toCharArray
-        // Converts the string to a char array
+        // toCharArray - public char[] toCharArray()
+        // Converts the string into a new character array
 
         // defining some strings to work with
         String myString1 = "";
@@ -579,7 +613,166 @@ public class Main {
         System.out.println("After toLowerCase() str now is " + lowerCaseStr + ", and it's length: " + lowerCaseStr.length()); // i?`
         // Note: another method toLowerCase(Locale.English) may be used and override the locale to English always
         // However, then the application is not internationalized.
+        System.out.println();
 
+        // use of equals and equalsIgnoreCase
+        String str1 = "Java rocks";
+        String str2 = "Java rocks";
+        String str3 = "The weather sucks";
+        String str4 = "the weather sucks";
+        String str5 = null;
+        boolean result = str1.equals(str2);
+        System.out.println("str1 = " + str1);
+        System.out.println("str2 = " + str2);
+        System.out.println("str3 = " + str3);
+        System.out.println("str4 = " + str4);
+        System.out.println("str5 = " + str5);
+        System.out.println("str1 equals str2: " + result);
+        System.out.println("str1 equals str3: " + str1.equals(str3));
+        System.out.println("str3 equals str4: " + str3.equals(str4));
+        System.out.println("str3 equals str4, using equalsIgnoreCase: " + str3.equalsIgnoreCase(str4));
+        System.out.println("str1 equals 'Java rocks': " + str1.equalsIgnoreCase("Java rocks"));
+        System.out.println("str1 equals str5: " + str1.equals(str5));
+        System.out.println();
+
+        // use of startsWith and endsWith
+        System.out.println("myString3: " + myString3);
+        System.out.println("myString3 starts with 'The': " + myString3.startsWith("The"));
+        System.out.println("myString3 starts with 'the': " + myString3.startsWith("the")); // case sensitive
+        System.out.println("myString3 ends with 'Do': " + myString3.endsWith("Do"));
+        System.out.println("myString3 ends with 'This': " + myString3.endsWith("This"));
+        System.out.println("myString3 ends with '.': " + myString3.endsWith("."));
+        System.out.println("myString3 starts with 'Rug', from index 4: " + myString3.startsWith("Rug", 4));
+        System.out.println();
+
+        // use of replace
+        System.out.println("myString2: " + myString2);
+        System.out.println("Replacing a's with e's: " + myString2.replace("a", "e")); // replace all a's with e's
+        System.out.println("Replacing F's with G's: " + myString2.replace("F", "G")); // character not present - replace() will return the original string
+        System.out.println("Replacing 'Will Not ' with nothing: " + myString2.replace("Will Not ", "")); // replacing a substring
+        System.out.println("Replacing xx with y in string xxx: " + "xxx".replace("xx", "y"));
+        System.out.println();
+
+        // use of replaceAll
+        String anotherStr = "Coding124Aint44325No1Cookie";
+        String regex = "\\d+"; // note: \d is a regex to match a digit, + matches the preceding token (digit) one or more times
+        System.out.println("anotherStr: " + anotherStr);
+        System.out.println("Replacing all numeric digits with space: " + anotherStr.replaceAll(regex," "));
+        System.out.println("myString2: " + myString2);
+        System.out.println("replacing all 'an' with 'en': " + myString2.replace("an", "en"));
+        System.out.println();
+
+        // use of contains
+        System.out.println("myString4: " + myString4);
+        System.out.println("myString4 contains 'Well': " + myString4.contains("Well")); // true
+        System.out.println("myString4 contains 'well': " + myString4.contains("well")); // false - case sensitive
+        System.out.println("myString4 contains '': " + myString4.contains("")); // true
+        String checkthis = "That";
+        if (myString4.contains(checkthis)) {
+            System.out.println(myString4 + " CONTAINS " + checkthis);
+        } else {
+            System.out.println(myString4 + " DOES NOT CONTAIN " + checkthis);
+        }
+        System.out.println();
+
+        // use of trim/strip
+        myString = "    It is what it is";
+        System.out.println("myString: " + myString);
+        System.out.println("myString length before trimming: " + myString.length());
+        myString = myString.trim();
+        System.out.println("myString after trimming: " + myString);
+        System.out.println("myString length after trimming: " + myString.length());
+        System.out.println();
+
+        myString = "\n\n It is what it is";
+        System.out.println("myString: " + myString);
+        System.out.println("myString after trimming: " + myString.trim()); // \n is consider a whitespace
+        System.out.println();
+
+        myString = " abc\t";
+        System.out.println("myString: " + myString);
+        System.out.println("myString length before trimming: " + myString.length());
+        myString = myString.trim();
+        System.out.println("myString after trimming: " + myString);
+        System.out.println("myString length after trimming: " + myString.length());  // \t is considered a single character
+        System.out.println();
+
+        // use of stripLeading/stripTrailing
+        myString = " abc\t";
+        System.out.println("myString: " + myString);
+        System.out.println("myString length before stripLeading: " + myString.length());
+        myString = myString.stripLeading();
+        System.out.println("myString after stripLeading: " + myString);
+        System.out.println("myString length after trimming: " + myString.length());
+        System.out.println();
+
+        // use of intern - returning a canonical representation of the string object
+        String compareStr1 = "xyz";
+        String compareStr2 = "xyz";
+        System.out.println(str1 == str2); // true - both strings have the same contents and will share the same memory (Java automatically interns the string literals)
+
+        String compareStr3 = new String("xyz");
+        String compareStr4 = new String("xyz");
+        System.out.println(compareStr3 == compareStr4); // false - not equal because these strings created with the new keyword don't share the same memory pool
+
+        compareStr3 = compareStr3.intern();
+        compareStr4 = compareStr4.intern();
+        System.out.println(compareStr3 == compareStr4); // true - after applying the intern() method both strings share the same memory pool
+        System.out.println();
+
+        // use of getBytes - encoding a strings into a sequence of bytes and storing it in a byte array
+        System.out.println("compareStr1 contents: " + compareStr1);
+        byte[] byteArray;
+        byteArray = compareStr1.getBytes();
+        System.out.println("compareStr1 contents as bytes in array: " + Arrays.toString(byteArray));
+        System.out.println();
+
+        // use of compareTo - comparing two strings in the dictionary order (based on Unicode value of each character in the strings)
+        compareStr1 = "Learn Java";
+        compareStr2 = "Learn Python";
+        compareStr3 = "Learn Java";
+        //compareStr1 = "Learn Python";
+        //compareStr2 = "Learn Java";
+        System.out.println(compareStr1.compareTo(compareStr2)); // -6 - compareStr1 comes before compareStr2
+        System.out.println(compareStr1.compareTo(compareStr3)); // 0 - strings are equal
+        System.out.println();
+
+        // format
+        str = "Java";
+        str2 = ", Right?";
+        int number = 8;
+        System.out.println(String.format("Hello %s", str)); // %s used for a string
+        System.out.println(String.format("We love Java SE%x", number)); // %x used for integer
+        System.out.println(String.format("We love Java SE%x %s", number, str2)); // combining multiple arguments
+        System.out.println(String.format("It is %s %s %s", "what", "it", "is")); // combining multiple arguments
+        System.out.println();
+
+        // split
+
+        // use of valueOf - returning the string representation of a passed argument
+        int a = 3;
+        long l = -324L;
+        float f = 231.3f;
+        double d = 55.443d;
+        char c = 'J';
+        char ch[] = {'J', 'a', 'v', 'a'};
+        System.out.println(String.valueOf(a));
+        System.out.println(String.valueOf(l));
+        System.out.println(String.valueOf(f));
+        System.out.println(String.valueOf(d));
+        System.out.println(String.valueOf(c)); // converting char to string
+        System.out.println(String.valueOf(ch)); // converting char array to string
+        System.out.println(String.valueOf(languages)); // converting object to string
+        System.out.println();
+
+        // use of toCharArray - converting a string tgo a char array
+        System.out.println("myString2 converted to a char array: "); // Java Programming
+        char[] somearray;
+        somearray = myString2.toCharArray();
+        System.out.println(somearray); // Java Programming
+        for (char element : somearray) {
+            System.out.print(element + " ");
+        }
 
     }
 }
