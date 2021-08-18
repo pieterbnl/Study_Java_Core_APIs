@@ -338,8 +338,10 @@ public class Main {
         // First create an array with the correct size
         // Then convert the arraylist into the array
         // And print out all elements of the array
-        // String[] arr = new String[0]; // this would not work, as the array requires as length equal or bigger than the list
         String[] arr = new String[languages.size()];
+        // String[] arr = new String[0]; // would cause exception later on, as the array requires as length equal or bigger than the list
+        // unless changing below to: arr = languages.toArray(arr) - in that case arr will be reassigned with the correct size
+
         languages.toArray(arr); // passing an array of type String as an argument
         System.out.println("Array contents, after converting languages toArray(): ");
         for (String item : arr) System.out.print(item + ", ");
@@ -383,6 +385,8 @@ public class Main {
         // Meaning it's size and contents are fixed
         // Even though String is immutable, it can still be used in a mutable class
         // A String instance variable can be made final
+        // It's common to call multiple methods on the same String, i.e.: method chaining
+        // For example: String result = "SoMe TexT   ".trim().toLowerCase().replace('a', 'A');
         //
         // length - public int length()
         // Returns the length of a string
@@ -409,7 +413,7 @@ public class Main {
         // indexOf - public int indexOf(int ch)
         // Returns the index of the first occurrence of the specified character/substring (ch) within the string
         // Returns -1 if the character does not occur
-        // Optionally, fromIndex can be passed, searching the ch character starting from this index
+        // Optionally, fromIndex can be passed, searching the ch character starting from this index (inclusive!)
         // Note that when an empty string is passed ("") as ch, 0 will be returned
         // This is because an empty string is a subset of every substring.
         // All characters are separated by an empty String and an empty String is present at the beginning and at the end?
@@ -529,6 +533,7 @@ public class Main {
         // Converts the string into a new character array
 
         // defining some strings to work with
+        String myString0 = null;
         String myString1 = "";
         String myString2 = "This Aggression Will Not Stand, Man";
         String myString3 = "The Rug Pee-Ers Did Not Do This.";
@@ -537,6 +542,7 @@ public class Main {
         String myString6 = "Hi\n";
 
         // use of length() - display the size of various strings
+        // System.out.println("myString0 '" + myString0 + "' length is: " + myString1.length() + " characters"); // null String will cause NullPointerException
         System.out.println("myString1 '" + myString1 + "' length is: " + myString1.length() + " characters");
         System.out.println("myString2 '" + myString2 + "' length is: " + myString2.length() + " characters");
         System.out.println("myString5 '" + myString5 + "' length is: " + myString5.length() + " characters");
@@ -587,12 +593,13 @@ public class Main {
 
         // use of substring() - returning a substring from myString
         // based on a given starting index (inclusive) (and ending index (exclusive))
-        System.out.println(myString);
-        System.out.println("substring of index 0 until 4): " + myString.substring(0,4)); // note: excludes index 4
-        System.out.println("substring of index 4 until 5): " + myString.substring(4,5));
-        System.out.println("substring of index 5 until 6): " + myString.substring(5,6));
+        System.out.println(myString); // Java rocks - 2021
+        System.out.println("substring of index 0 until 4): " + myString.substring(0,4)); // Java - note: excludes index 4
+        System.out.println("substring of index 4 until 5): " + myString.substring(4,5)); //
+        System.out.println("substring of index 5 until 6): " + myString.substring(5,6)); // r
         System.out.println("substring of index 7 until 7): " + myString.substring(7,7)); // will return an empty string
-        System.out.println("substring of index 5 until end): " + myString.substring(5)); // no end index specified, means ending at the end of string
+        System.out.println("substring of index 5 until end): " + myString.substring(5)); // rocks - 2021 - note: no end index specified, means ending at the end of string
+        System.out.println("substring of index 1 (from 'a') until 6): " + myString.substring(myString.indexOf('a'),6)); // ava r - note: using indexOf to grab the index of the first a
         // System.out.println("substring of index -5 until 5): " + myString.substring(-5, 5)); // given startindex is negative; will result in StringIndexOutOfBoundsException
         // System.out.println("substring of index 25 until end): " + myString.substring(25)); // given index is out of bounds; will result in StringIndexOutOfBoundsException
         // System.out.println("substring of index 10 until 5): " + myString.substring(10, 5)); // given startindex is higher than end index; will result in StringIndexOutOfBoundsException
@@ -642,6 +649,7 @@ public class Main {
         System.out.println("myString3 ends with 'Do': " + myString3.endsWith("Do"));
         System.out.println("myString3 ends with 'This': " + myString3.endsWith("This"));
         System.out.println("myString3 ends with '.': " + myString3.endsWith("."));
+        System.out.println("ABCDE starts with 'AB': " + "ABCDE".startsWith("AB"));
         System.out.println("myString3 starts with 'Rug', from index 4: " + myString3.startsWith("Rug", 4));
         System.out.println();
 
@@ -667,6 +675,8 @@ public class Main {
         System.out.println("myString4 contains 'Well': " + myString4.contains("Well")); // true
         System.out.println("myString4 contains 'well': " + myString4.contains("well")); // false - case sensitive
         System.out.println("myString4 contains '': " + myString4.contains("")); // true
+        System.out.println("ABCDE contains 'CD': " + "ABCDE".contains("CD")); // true
+        System.out.println("ABCDE contains 'cd': " + "ABCDE".contains("cd")); // false
         String checkthis = "That";
         if (myString4.contains(checkthis)) {
             System.out.println(myString4 + " CONTAINS " + checkthis);
@@ -747,7 +757,13 @@ public class Main {
         System.out.println(String.format("It is %s %s %s", "what", "it", "is")); // combining multiple arguments
         System.out.println();
 
-        // split
+        // split - dividing a string at a specified regex and returning an array of substrings
+        String text = "Java can be fun to learn";
+        String[] resultArr = text.split(" "); // splitting string in substrings at every space, and storing each substring in an array element
+        for (String element : resultArr) // looping through the elements and displaying its contents
+            System.out.print(element + ", ");
+        System.out.println();
+        System.out.println();
 
         // use of valueOf - returning the string representation of a passed argument
         int a = 3;
@@ -773,6 +789,169 @@ public class Main {
         for (char element : somearray) {
             System.out.print(element + " ");
         }
+        System.out.println();
+        System.out.println();
+
+        // String method chaining example - combining several methods in one go
+        System.out.println("SoMe TexT   ".trim().toLowerCase().replace('a', 'A'));
+        System.out.println();
+
+
+        // *********************
+        // StringBuilder
+        // *********************
+        // Unlike the String class, StringBuilder is not immutable
+        // StringBuilder objects are like String objects, except that they can be modified
+        // The objects are treated Internally like var-length arrays that contain a sequence of characters
+        // Length and content of the sequence can be changed through method invocations, at any point
+        // When chaining StringBuilder objects, the StringBuilder changes its own state and returns a reference to itself
+        //
+        // The StringBuilder class provides no guarantee of synchronization whereas the StringBuffer class does
+        // This class is designed for use as a drop-in replacement for StringBuffer
+        // in places where the StringBuffer was being used by a single thread (generally the case)
+        // Instances of StringBuilder are not safe for use by multiple threads
+        // If such synchronization is required then it is recommended that StringBuffer be used
+        //
+        // StringBuilder should only be used when it offers a coding or performance advantage
+        // For example when concatenating a large number of Strings
+        // Even when using StringBuilder, the end result typically needs to be a String (using toString() for conversion)
+        //
+        // StringBuilder has several constructors, of which one is: StringBuilder(int capacity)
+        // By providing a 'capacity', StringBuilder reserves a certain number of slots for characters
+        // Other constructors:
+        // - StringBuilder() - string builder with no characters in it and an initial capacity of 16 characters
+        // - StringBuilder(CharSequence seq) - string builder that contains the same characters as the specified CharSequence
+        // - StringBuilder(String str) - string builder initialized to the contents of the specified string
+        //
+        // NOTE:
+        // - Size is the number of characters currently in the sequence
+        // - Capacity is the number of characters the sequence can currently hold
+        // - With String, being immutable, size and capacity are the same
+        // - With StringBuilder, being mutable, Java gives it a default capacity of 16 or of choosing
+        //
+        // StringBuilder has several methods that work exactly the same as String:
+        // charAt(), indexOf(), length(), substring()
+        // Note that substring() returns a String, and not a StringBuilder
+        // Substring() is just a method to inquire about where a substring happens to be
+        //
+        // Other methods:
+        //
+        // - append() - StringBuilder append(String str)
+        // Most frequently used StringBuilder method
+        // Adds the parameters to the StringBuilder and returns a reference to current StringBuilder object
+        // Has a large number of different constructors, for appending different kind of string representations
+        // For boolean arguments, char arguments, char array arguments, subarray of char array argument, etc.
+        //
+        // - insert() - StringBuilder insert(int offset, String str)
+        // Add characters to a StringBuilder at the requested index (offset) and returns a reference to current StringBuilder
+        // When inserting a character or string, all elements above that position will be shifted by the length of the argument
+        // If str is null, then the four characters "null" are inserted into this sequence
+        // The offset argument must be greater than or equal to 0, and less than or equal to the length of this sequence
+        // Throws StringIndexOutOfBoundsException if the offset is invalid.
+        // Like append(), insert() also has lots of method signatures for different types
+        // Including: public StringBuilder insert(int dstOffset, CharSequence s, int start, int end)
+        // Inserts a subsequence of the specified CharSequence into this sequence
+        //
+        // delete() - public StringBuilder delete(int start, int end)
+        // Opposite of insert method: removes characters from a sequence and returns a reference to current StringBuilder
+        // Substring begins at the specified start and extends to the character at index end - 1
+        // or to the end of the sequence if no such character exists
+        // If start is equal to end, no changes are made
+        // Throws StringIndexOutOfBoundsException if start is negative, greater than length(), or greater than end
+        //
+        // deleteCharAt() - public StringBuilder deleteCharAt(int index)
+        // This method is convenient for deleting one character
+        // Removes the char at the specified position in the sequence, which is then shortened by one char
+        // Throws StringIndexOutOfBoundsException if index is negative, or greater than or equal to length()
+        //
+        // reverse() - public StringBuilder reverse()
+        // Reverses the characters in the sequence and returns a reference to the StringBuilder
+        // If there are any surrogate pairs included in the sequence, these are treated as single characters for the reverse operation
+        //
+        // toString() - public String toString()
+        // Converts a StringBuilder into a String
+        // Allocates and initializes a new String object to contain the character sequence currently represented by the StringBuilder object
+        // Note: changes to this sequence do not affect the contents of the String
+
+        // Creating a StringBuilder object - with two references
+        StringBuilder sb1 = new StringBuilder("Who ");
+        sb1.append("Let ");
+        sb1.append("The Dogs ");
+        StringBuilder sb2 = sb1.append("Out");
+        System.out.println(sb1);
+        System.out.println(sb2); // points to sb StringBuilder objects: same output
+
+        // Creating a StringBuilder object
+        StringBuilder sbX = new StringBuilder(); // sbX will point to a StringBuilder that contains an empty sequence of characters
+        System.out.println(sbX); // nothing to print
+        StringBuilder sbY = new StringBuilder(10); // not a value for the StringBuilder to hold, but a capacity
+        System.out.println(sbY);
+
+        // append() - adding a parameter to the StringBuilder
+        StringBuilder sb = new StringBuilder().append(333).append('x').append(2);
+        sb.append("?").append(true);
+        System.out.println(sb); // 333x2?true
+
+        // insert() - add characters to StringBuilder at requested index
+        System.out.println("sb1 currently is: " + sb1);
+        sb1.insert(3, "?"); // adding a ? at index 3 - note that from now on, all following elements are shifted 1
+        System.out.println("sb1 now is: " + sb1);
+        sb1.insert(21, "?");
+        // sb1.insert(25, "?"); // will cause StringIndexOutOfBoundsException
+        System.out.println("sb1 now is: " + sb1);
+        System.out.println();
+
+        // insert() with CharSequence
+        // in below example, 22 is the insert position of the CharSequence cSeq
+        // And cSeq has to be insert starting from its element 0 to its ending element 7, which covers the whole char
+        System.out.println("sb1 currently is: " + sb1);
+        CharSequence cSeq =" Today?";
+        sb1.insert(22, cSeq,0,7);
+        System.out.println("sb1 now is: " + sb1);
+        System.out.println();
+
+        // delete() & deleteCharAt() - deleting a sequence of chars and a single char, respectively
+        System.out.println("sb1 currently is: " + sb1);
+        System.out.println("sb1 after deleting character at index 0 up and inclusive 5: " + sb1.delete(0,5));
+        System.out.println("sb1 after deleting character at index 10: " + sb1.deleteCharAt(16));
+        // System.out.println("sb1 after deleting character at index 25: " + sb1.deleteCharAt(25)); // throws exception as this element does not exist
+        System.out.println();
+
+        // reverse() - reversing the characters in sequence
+        System.out.println("sb1 currently is: " + sb1);
+        System.out.println("sb1 after reverse is: " + sb1.reverse());
+        System.out.println();
+
+        // toString() - converting a StringBuilder object to a String
+        System.out.println("sb1 StringBuilder currently is: " + sb1);
+        String s = sb1.toString();
+        System.out.println("sb1 now converted to String s is: " + sb1);
+
+        // StringBuilder Equality
+        System.out.println("Testing StringBuilder equality");
+        StringBuilder sbOne = new StringBuilder();
+        StringBuilder sbTwo = new StringBuilder();
+        StringBuilder sbThree = sbOne.append("?");
+        System.out.println(sbOne == sbTwo); // false - separate StringBuilder objects
+        System.out.println(sbOne == sbThree); // true - pointing to the same StringBuilder object
+        System.out.println();
+
+        // String Equality (
+        // Note: never use == to compare String object equality - just for testing purposes
+        // String implements an equals() methods that compares String's on its contents, instead of String itself
+        // Which is what == does: determining whether the references points to the same object
+        System.out.println("Testing String equality");
+        String x = "Hi there";
+        String y = "Hi there";
+        System.out.println(x == y); // true - as Strings literals are pooled - here only one literal got created in memory, both x and y point to the same memory
+
+        String z2 = new String("Hi There");
+        System.out.println(x == z2); // false - by using new for z2, it's forced to be created as a new object, not sharing a pooled value
+
+        String z = " Hi there".trim(); // note: when removing the space in front of Hi, trim will not be executed.. and z be considered equal to x!
+        System.out.println(x == z); // false - not the same String literal (z is computed at runtime due to the trim, creating a new String object)
+        System.out.println(x.equals(z)); // true - String's implemented equals() method checks the values inside a String, not the String itself
+        
 
     }
 }
