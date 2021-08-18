@@ -13,8 +13,34 @@ public class Main {
     public static void main(String[] args) {
 
         // *********************
+        // Arrays
+        // *********************
+        // See separate study on Arrays
+        // Including: array creation, using a (multidimensional) array, sorting, searching, varargs
+
+        // *********************
         // ArrayList
         // *********************
+        // When creating an array it must be known how elements it will have to store
+        // ArrayLists however can change size at runtime as needed
+        // An ArrayList is an ordered sequence that allows duplicates
+        // ArrayList requires an import: import java.util.ArrayList
+        //
+        // Three ways to create an ArrayList:
+        // 1. ArrayList list1 = new ArrayList() // creates an ArrayList with default no. of slots (unfilled)
+        // 2. ArrayList list2 = new ArrayList(x) // creates an ArrayList with x elements
+        // 2. ArrayList list3 = new ArrayList(listx) // creates an ArrayList as copy of list listx
+        //
+        // Generics can be applied to ArrayList to enforce acceptance of a certain type only
+        //
+        // ArrayList implements interface List. I.e.: ArrayList is a List.
+        //
+        // ArrayLists can store any type, accept primitives
+        // To store a primitive, it must be boxed in a wrapper class first:
+        // - .valueOf() is used for converting a primitive to a type (boxing)
+        // - .parseInt() (or any other relevant variant) for converting a type to a primitive (unboxing)
+        // However, autoboxing has removed the need for these methods nowadays
+
         // get -- public E get(int index)
         // Returns element at the specified position in the arraylist
         // Throws IndexOutOfBoundsException if the index is out of range
@@ -334,7 +360,12 @@ public class Main {
         System.out.println("ArrayList languages, after sorting:\n" + languages);
         System.out.println();
 
-        // use of toArray()
+        // alternatively, using Collection's helper class 'sort':
+        Collections.sort(languages);
+        System.out.println("ArrayList languages, after sorting with Collections.sort:\n" + languages);
+        System.out.println();
+
+        // use of toArray() -to convert a list to an array- and Arrays.asList -to convert the array back to a list-
         // First create an array with the correct size
         // Then convert the arraylist into the array
         // And print out all elements of the array
@@ -346,6 +377,8 @@ public class Main {
         System.out.println("Array contents, after converting languages toArray(): ");
         for (String item : arr) System.out.print(item + ", ");
         System.out.println();
+        List<String> list = Arrays.asList(arr); // converts list back to an array
+        System.out.println(arr[0]); // display an element from the array
         System.out.println();
 
         // another use of toArray() - without parameter (not recommended)
@@ -951,7 +984,8 @@ public class Main {
         String z = " Hi there".trim(); // note: when removing the space in front of Hi, trim will not be executed.. and z be considered equal to x!
         System.out.println(x == z); // false - not the same String literal (z is computed at runtime due to the trim, creating a new String object)
         System.out.println(x.equals(z)); // true - String's implemented equals() method checks the values inside a String, not the String itself
-        
+
+
 
     }
 }
