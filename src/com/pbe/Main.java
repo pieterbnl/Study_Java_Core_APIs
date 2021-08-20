@@ -1,5 +1,8 @@
 package com.pbe;
 
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 
 /** Study on Java core APIs
@@ -984,8 +987,228 @@ public class Main {
         String z = " Hi there".trim(); // note: when removing the space in front of Hi, trim will not be executed.. and z be considered equal to x!
         System.out.println(x == z); // false - not the same String literal (z is computed at runtime due to the trim, creating a new String object)
         System.out.println(x.equals(z)); // true - String's implemented equals() method checks the values inside a String, not the String itself
+        System.out.println();
 
 
+        // *********************
+        // Dates and Times
+        // *********************
+        // In Java 8 working with dates and times got revamped
+        // The new Date-Time API is aimed at being clear, fluent, immutable (previously it was not thread-safe) and extensible
+        // Working with date- and time classes requires import of java.time.*
+        // Java.time consists of 4 subpackages:
+        // 1. java.time.chrono - representing calendar systems other than the default ISO-8601
+        // 2. java.time.format - classes for formatting and parsing dates and times
+        // 3. java.time.temporal - extended API for frameworks and library writers
+        // 4. java.time.zone - classes that support (offsets from) time zones and time zone rules
+        //
+        // Java.time is based on the International Organization for Standardization (ISO-8601) calendar system
+        // This calendar is based on the Gregorian calendar system
+        // This system is used globally as the de facto standard for representing date and time
+        // However, commonly used global calendars are also supported, using the java.time.chrono package
+        // It's also possible to create and own calendar system
+        //
+        // Three ways of data/time info (without timezone):
+        // 1. LocalDate - contains date only, no timezone
+        // 2. LocalTime - contains time only, no timezone
+        // 3. LocalDateTime - contains both data and time, no timezone
+        //
+        // Oracle recommends avoiding time zones, unless really needed
+        // If needed to communicate across time zones, use ZonedDateTime
+        //
+        // The Date-Time API offers a rich set of methods within a rich set of classes
+        // Method names are made consistent between classes where possible
+        // Many classes offer a now method, capturing the date or time of the current moment
+        // From methods  allow conversion from one class to another
+        // Most classes in the API are immutable, hence no set methods are included
+        //
+        // Commonly used prefixes: of, from, parse, format, get, is, with, plus, minus, to, at
+        //
+        // With the methods LocalDate.of, LocalTime.of, LocalDateTime.of, one can manually create dates, times and combinations
+        // Be aware that these date and time classes have private constructors to force using their static methods
+        // The following will not compile: LocalDate myDate = new LocalDate();
+        // It's not possible to construct a date or time object directly
+        //
+        // A DateTimeException is thrown when an invalid date or time value is passed
+        //
+        // Dates and times can be manipulated by adding and subtracting
+        // As date and time classes are immutable, the results needs to be assigned to a reference variable, to prevent loss
+        //
+        // It's common for date and time methods to be chained
+        //
+        // LocalDate
+        //
+        //
+        // LocalTime
+        //
+        //
+        // LocalDateTime
+        //
+        //
+        // Period
+        //
+        //
+
+
+        // Date and time objects - using static method .now() to give the current date and time
+        // The output depends on what date/time is ran and living location
+        // Note: Java uses T to separate date and time when converting LocalDateTime to a String
+        System.out.println("Current local date: " + LocalDate.now());
+        System.out.println("Current local time: " + LocalTime.now());
+        System.out.println("Current local date & time: " + LocalDateTime.now());
+        System.out.println();
+
+        // Manually creating a date without time
+        LocalDate myLocalDate1 = LocalDate.of(2021, Month.AUGUST, 19); // using a Month constant (ENUM)
+        LocalDate myLocalDate2 = LocalDate.of(2021, 8, 19); // using an int number to indicate the month
+        System.out.println("myLocalDate1: " + myLocalDate1);
+        System.out.println("myLocalDate2: " + myLocalDate2);
+        System.out.println();
+
+        // Manually creating a time
+        LocalTime myLocalTime1 = LocalTime.of(11,58); // hours, minutes
+        LocalTime myLocalTime2 = LocalTime.of(11,58, 30); // hours, minutes, seconds
+        LocalTime myLocalTime3 = LocalTime.of(11,58, 30, 666); // hours, minutes, seconds, nanoseconds
+        System.out.println("myLocalTime1: " + myLocalTime1);
+        System.out.println("myLocalTime2: " + myLocalTime2);
+        System.out.println("myLocalTime3: " + myLocalTime3);
+        System.out.println();
+
+        // Combining dates and times
+        // Note that LocalDateTime has a load of method signatures; these are just a few combinations of them
+        LocalDateTime myLocalDateTime1 = LocalDateTime.of(2021, Month.AUGUST, 19, 12, 44, 30, 200);
+        LocalDateTime myLocalDateTime2 = LocalDateTime.of(myLocalDate1, myLocalTime1); // creating LocalDateTime by use of separate Date and Time objects
+        // LocalDateTime myLocalDateTime3 = LocalDateTime.of(2021, Month.AUGUST, 40, 12, 44); // Will throw DateTimeException, there are no 40 days in an (earthly..) month
+        // LocalDateTime myLocalDateTime4 = new LocalDateTime(); // does not compile: not allowed to construct a date or time object directly
+        System.out.println("myLocalDateTime1: " + myLocalDateTime1);
+        System.out.println("myLocalDateTime2: " + myLocalDateTime2);
+        System.out.println();
+
+        // Manipulating dates and time
+        // Adding to a date
+        LocalDate myCurrentDate = LocalDate.of(2021, Month.AUGUST, 19);
+        System.out.println("Current date is: " + myCurrentDate);
+        myCurrentDate = myCurrentDate.plusDays(2); // adding 2 days
+        System.out.println("Current date is, after adding 2 days: " + myCurrentDate);
+        myCurrentDate = myCurrentDate.plusMonths(1); // adding 1 month
+        System.out.println("Current date is, after adding 1 month: " + myCurrentDate);
+        myCurrentDate = myCurrentDate.plusMonths(4); // adding 4 months
+        System.out.println("Current date is, after adding 4 months: " + myCurrentDate); // note it sticks to the same day, adding 4 full months
+        myCurrentDate = myCurrentDate.plusDays(10); // adding 10 days
+        System.out.println("Current date is, after adding 10 days: " + myCurrentDate); // note adding 11 days would result jumping to the next month
+        myCurrentDate = myCurrentDate.plusMonths(1); // adding 1 month1
+        System.out.println("Current date is, after adding 1 month: " + myCurrentDate); // note Java knows feb in 202 ends with 28 days
+        System.out.println();
+
+        // Subtracting from a date and time
+        LocalTime myCurrentTime = LocalTime.of(13,18, 30);
+        LocalDateTime myCurrentDateTime = LocalDateTime.of(myCurrentDate, myCurrentTime); // note expecting date first, then time
+        System.out.println("Current date/time is: " + myCurrentDateTime); // note it adds a full month, up to the last day possible of Feb (in that year)
+        myCurrentDateTime = myCurrentDateTime.minusHours(10); // subtracting 10 hours
+        System.out.println("Current date/time, after subtracting 10 hours: " + myCurrentDateTime);
+        // same goes for subtracting minutes, seconds, nanoseconds
+        System.out.println();
+
+        // Chaining methods
+        System.out.println("Current date/time is: " + myCurrentDateTime);
+        myCurrentDateTime = LocalDateTime.of(myCurrentDate, myCurrentTime).minusDays(28).minusHours(10).minusSeconds(30);
+        System.out.println("Current date/time is after subtracting using chained methods: " + myCurrentDateTime);
+        System.out.println();
+
+        // Checking if a date is before another date
+        myLocalDateTime1 = myLocalDateTime1.of(2021, Month.JANUARY, 1, 23, 59, 59);
+        //myLocalDateTime1 = myLocalDateTime1.of(2021, Month.AUGUST, 22, 14, 16, 30);
+        myLocalDateTime2 = myLocalDateTime2.of(2021, Month.AUGUST, 22, 14, 16, 30);
+        //myLocalDateTime2 = myLocalDateTime2.of(2021, Month.JANUARY, 1, 23, 59, 59);
+        System.out.println("myLocalDateTime1: " + myLocalDateTime1);
+        System.out.println("myLocalDateTime2: " + myLocalDateTime2);
+        System.out.println("myLocalDateTime1 is before myLocalDateTime2?: " + myLocalDateTime1.isBefore(myLocalDateTime2));
+        System.out.println();
+
+        // Using Period to cary out a recurring action between a start and end date
+        LocalDate start = LocalDate.of(2021, Month.JANUARY, 1);
+        LocalDate end = LocalDate.of(2021, Month.APRIL, 1);
+        Period period = Period.ofMonths(1); // creates a period of 1 month
+        // Period period = Period.of(3, 2, 1); // periods can also be set up as combination of years, months, days
+        while (start.isBefore(end)) {
+            System.out.println("some action");
+            start = start.plus(period); // adding period to start date, which will eventually lead to ending the loop
+        }
+        System.out.println();
+
+        // Note: it's not possible to chain methods when creating a Period
+        // In the following example, only the last method is used
+        // This is because Period.of.XXX methods are static methods
+        Period nogoodperiod = Period.ofYears(1).ofWeeks(1);
+        System.out.println("nogoodperiod: " + nogoodperiod); // results in P7D, meaning a period of 7 days, thus neglecting the year
+        System.out.println();
+
+        // Adding a period to a LocalDateTime object
+        // Note: adding a period to a LocalTime only object would cause an UnsupportedTemporalTypeException
+        System.out.println("myCurrentDateTime: " + myCurrentDateTime);
+        System.out.println("period: " + period); // P1M = 1 month
+        myCurrentDateTime = myCurrentDateTime.plus(period);
+        System.out.println("myCurrentDateTime, after adding period: " + myCurrentDateTime);
+        System.out.println();
+
+        // Formatting Dates and Times
+        // First, with standard methods
+        System.out.println("myCurrentDateTime: " + myCurrentDateTime);
+        System.out.println("day of week: " + myCurrentDateTime.getDayOfWeek());
+        System.out.println("day of month: " + myCurrentDateTime.getDayOfMonth());
+        System.out.println("day of year: " + myCurrentDateTime.getDayOfYear());
+        System.out.println("month: " + myCurrentDateTime.getMonth());
+        System.out.println("hour: " + myCurrentDateTime.getHour());
+        System.out.println("year: " + myCurrentDateTime.getYear());
+        System.out.println();
+
+        // Using DateTimeFormatter (in java.time.format package)
+        myCurrentDateTime = LocalDateTime.now();
+        System.out.println("myCurrentDateTime: " + myCurrentDateTime); // getting the current date and time
+        System.out.println("date: " + myCurrentDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE)); // showing date only
+        System.out.println("time: " + myCurrentDateTime.format(DateTimeFormatter.ISO_LOCAL_TIME)); // showing time only
+        System.out.println("date time: " + myCurrentDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)); // showing date time
+        System.out.println();
+
+        // Using DateTimeFormatter, in a predefined SHORT and MEDIUM style format
+        System.out.println("Using DateTimeFormatter, in a predefined SHORT and MEDIUM style format");
+        DateTimeFormatter shortDateTime = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
+        LocalDate date = LocalDate.of(2021, Month.AUGUST, 20);
+        LocalTime time = LocalTime.of(11, 43, 0);
+        LocalDateTime datetime = LocalDateTime.of(date,time);
+
+        DateTimeFormatter shortForm = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
+        DateTimeFormatter mediumForm = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
+
+        System.out.println(shortForm.format(datetime));
+        System.out.println(mediumForm.format(datetime));
+        System.out.println();
+
+        // Using DateTimeFormatter, with a format pattern
+        System.out.println("Using DateTimeFormatter, with a format pattern");
+        System.out.println("myCurrentDateTime: " + myCurrentDateTime); // getting the current date and time
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"); // creating a pattern to format
+        System.out.println("date time again, applying a format pattern: " + dtf.format(myCurrentDateTime)); // dropping nanoseconds
+        dtf = DateTimeFormatter.ofPattern("MMMM dd, yyyy, hh:mm", Locale.ENGLISH); // creating another pattern to format - setting Locale to English
+        System.out.println("date time again, applying another format pattern: " + dtf.format(myCurrentDateTime));
+        System.out.println();
+
+        // Another short example
+        System.out.println("Another short example");
+        dtf = DateTimeFormatter.ofPattern("hh:mm");
+        System.out.println(dtf.format(datetime)); // will only express time as the pattern does not include date
+        // System.out.println(dtf.format(date)); // will cause an exception as the pattern does not include date and date is all that's asked to be formatted here
+        System.out.println(dtf.format(time));
+        System.out.println();
+
+        // Converting a String to a date or time, using .parse
+        System.out.println("Converting a String to a date or time, using .parse");
+        dtf = DateTimeFormatter.ofPattern("MM dd yyyy");
+        date = LocalDate.parse("08 20 2021", dtf);
+        time = LocalTime.parse("11:22");
+        System.out.println(date);
+        System.out.println(time);
+        System.out.println();
 
     }
 }
