@@ -832,6 +832,11 @@ public class Main {
         System.out.println("SoMe TexT   ".trim().toLowerCase().replace('a', 'A'));
         System.out.println();
 
+        // Note that the following would not compile
+        // The sb reference doesn’t exist until after the chained calls complete
+        // Hence .length() cannot be called yet as sb is not yet initialized
+        // StringBuilder sb = new StringBuilder("radical").insert(sb.length(), "madness");
+
 
         // *********************
         // StringBuilder
@@ -1024,6 +1029,19 @@ public class Main {
         //
         // Commonly used prefixes: of, from, parse, format, get, is, with, plus, minus, to, at
         //
+        // Date-Time methods
+        // 1. New instances can be created with: now, parse, of*, with*
+        // LocalDateTime.now()
+        // LocalDate.parse(CharSequence text)
+        // LocalTime.of(int hour, int minute, int second)
+        //
+        // 2. Getting date time information with: get*
+        // LocalDate.getYear()
+        //
+        // 3. Computing another instance of the same type: plus*, minus*
+        // LocalTime.plusMinutes(long minutesToAdd)
+        // LocalDate.minusWeeks(long weeksToSubtract)
+
         // With the methods LocalDate.of, LocalTime.of, LocalDateTime.of, one can manually create dates, times and combinations
         // Be aware that these date and time classes have private constructors to force using their static methods
         // The following will not compile: LocalDate myDate = new LocalDate();
@@ -1036,18 +1054,50 @@ public class Main {
         //
         // It's common for date and time methods to be chained
         //
-        // LocalDate
+        // LocalDateTime
+        // Immutable date-time object that represents a date-time
+        // Often viewed as year-month-day-hour-minute second
+        // Also provides other date and time fields such as day-of-year, day-of-week, week-of-year
+        // Time is represented with nanosecond precision
         //
+        // LocalDate
+        // Immutable date-time object that represents a date
+        // Often viewed as year-month-day
+        // Also provides other date fields such as day-of-year, day-of-week, week-of-year
         //
         // LocalTime
-        //
-        //
-        // LocalDateTime
-        //
-        //
+        // Immutable time object that represents a time
+        // Often viewed as hour-minute-second
+        // Represented with nanosecond precision
+
         // Period
+        // The Period class models a quantity or amount of time in terms of years, months and days
+        // Note: not in hours, minutes, .. !
         //
+        // Methods for creating a new instance: parse, of*, with*
+        // Period.parse(CharSequence text)
+        // Period.ofDays(int days)
+        // Period.withMonths(int months)
         //
+        // Methods for getting Period information: get*
+        // Period.getYears()
+        //
+        // Methods for computing another Period: plus*, minus*
+        // Period.plusDays(long daysToAdd)
+        // Period.minusDays(long daysToSubtract)
+
+        // DataTimeFormatter
+        // The DateTimeFormatter class helps to print and parse date-time objects
+        // It provides an entry point for printing and parsing (in own chosen format)
+        // It also has common implementations of DateTimeFormatter:
+        // 1. Using predefined constants such as ISO_LOCAL_DATE
+        // 2. Using pattern letters, such as uuuu-MMM-dd
+        // 3. Using localized styles, such as long or medium
+        // For example:
+        // DataTimeFormatter dtFormat = DataTimeFormatter.ISO_DATE;
+        // LocalDate date = LocalDate.now();
+        // String text = date.format(formatter);
+        // LocalDate parsedDate = LocalDate.parse(text, dtFormat);
 
 
         // Date and time objects - using static method .now() to give the current date and time
@@ -1086,10 +1136,13 @@ public class Main {
 
         // Manipulating dates and time
         // Adding to a date
+        System.out.println("Manipulating dates and time");
         LocalDate myCurrentDate = LocalDate.of(2021, Month.AUGUST, 19);
         System.out.println("Current date is: " + myCurrentDate);
         myCurrentDate = myCurrentDate.plusDays(2); // adding 2 days
         System.out.println("Current date is, after adding 2 days: " + myCurrentDate);
+        myCurrentDate = myCurrentDate.plusDays(-1); // it's possible to use a negative value while using plusDays: subtracting 1 day
+        System.out.println("Current date is, after subtracting 1 day: " + myCurrentDate);
         myCurrentDate = myCurrentDate.plusMonths(1); // adding 1 month
         System.out.println("Current date is, after adding 1 month: " + myCurrentDate);
         myCurrentDate = myCurrentDate.plusMonths(4); // adding 4 months
